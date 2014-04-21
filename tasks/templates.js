@@ -7,7 +7,7 @@ module.exports = function(grunt){
     grunt.registerMultiTask('templates', 'Compile all templates', function(){
 
         this.files.forEach(function(f){
-            var code = '$(function() {\n\twindow.TPL = {\n';
+            var code = 'window.TPL = {\n';
                 
             code += f.src.map(
                 function(filepath){
@@ -19,7 +19,7 @@ module.exports = function(grunt){
                 }
             ).join(',\n');
             
-            code += '\n\t};\n});\n';
+            code += '\n\t};\n';
 
             grunt.file.write(f.dest, code);
             grunt.log.writeln('File "' + f.dest + '" created.');
