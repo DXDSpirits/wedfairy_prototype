@@ -110,7 +110,7 @@ $yellow: #bfa260;
     }
 }
 
-#hero {
+#Hero {
     position: relative;
     .carousel {
         position: absolute;
@@ -131,7 +131,7 @@ $yellow: #bfa260;
     }
 }
 
-#thegirl {
+#TheGirl {
     background: $pink;
     .shy-girl {
         position: absolute;
@@ -193,7 +193,7 @@ $yellow: #bfa260;
     }
 }
 
-#thebigday {
+#TheBigDay {
     .line {
         position: absolute;
         top: 0;
@@ -256,7 +256,7 @@ $yellow: #bfa260;
     }
 }
 
-#proposal {
+#Proposal {
     .rose-cover {
         background-repeat: no-repeat;
         background-size: cover;
@@ -282,7 +282,7 @@ $yellow: #bfa260;
     }
 }
 
-#goodnight {
+#GoodNight {
     background: $blue;
     #nightsky {
         width: 100%;
@@ -296,7 +296,7 @@ $yellow: #bfa260;
     }
 }
 
-#goodmorning {
+#GoodMorning {
     background: $pink;
     > header {
         background: #fafafa;
@@ -314,7 +314,7 @@ $yellow: #bfa260;
     }
 }
 
-#lavie {
+#LaVie {
     .cover {
         width: 100%;
         height: 50%;
@@ -370,7 +370,7 @@ $yellow: #bfa260;
     }
 }
 
-#honeymoon {
+#Honeymoon {
     > header {
         height: 200px;
         background: url(../img/sunset.jpg) no-repeat left center;
@@ -388,7 +388,7 @@ $yellow: #bfa260;
     }
 }
 
-#contact {
+#Contact {
     .copyright {
         font-family: wide, sans-serif;
         font-size: 20px;

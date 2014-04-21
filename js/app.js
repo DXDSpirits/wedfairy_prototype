@@ -76,9 +76,10 @@
      * App utils
      */
     App.prerenderView = function(viewIndex,callback){
+        if(App.sectionList[viewIndex].isPrerender)return;
         var data = sever_data || [];
         var resource = data[viewIndex].img;
-        var queue = new Queue(callback);
+        var queue = new Queue(viewIndex,callback);
         _.forEach(resource,function(url){
             queue.push(url);
         });

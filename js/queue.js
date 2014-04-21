@@ -1,4 +1,5 @@
-window.Queue = function(callback){
+window.Queue = function(viewIndex,callback){
+    this.viewIndex = viewIndex;
     this.questCounter = 0;
     this.questArray =[];
     if(typeof callback == 'function'){
@@ -31,11 +32,16 @@ Queue.prototype.end = function(){
             callback();
         }
     });
+    App.sectionList[this.viewIndex].isPrerender = true;
     delete this;//???
 }
 
 Queue.prototype.start = function(){
     var self = this;
+    if(this.questCounter==0){
+        this.end();
+        return;
+    }
     _.forEach(this.questArray,function(url){
         var img = new Image();
         img.onload = function(){

@@ -5,13 +5,16 @@
 
         App.View.Section = Backbone.View.extend({
             template: Mustache.compile(""),
+            isPrerender:false,
             renderTemplate: function(attrs) {
                 this.$el.html(this.template(attrs || {}));
                 return this;
             },
             onEnter: function() {},
             onLeave: function() {},
-            callback:function() {}
+            callback:function() {
+                console.log('complete');
+            }
         });
 
         /**
@@ -45,9 +48,6 @@
             onLeave: function() {
                 this.$('.shy-girl').removeClass('invisible');
                 this.$('.love-cross').removeClass('crossed');
-            },
-            callback:function(){
-                console.log('thegirl');
             }
         }))({el: $('#TheGirl')});
 
