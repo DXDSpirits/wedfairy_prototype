@@ -68,25 +68,38 @@ App.start = function(){
    App.initApplication();
 }
 
-App.initDom = function(){
+App.loadScript = function(site_id){
+  var counter = 4;
+  var callback = function(){
+      counter--;
+      if(counter==0){
+          App.start();
+      }
+  }
+  var theme_id = sever_data.theme_type;
+  App.loadFile('css','/theme/'+theme_id+'/theme-'+site_id+'.css').onload=callback;
+  App.loadFile('script','/theme/'+theme_id+'/template-'+site_id+'.js').onload=callback;
+  App.loadFile('script','/theme/'+theme_id+'/view-'+site_id+'.js').onload=callback;
+  App.loadFile('script','/theme/'+theme_id+'/application-'+site_id+'.js').onload=callback;
+}
 
+App.initDom = function(){
     var data = App.SiteData.attributes || [];
-    _.forEach(data,function(v,index){
+    _.forEach(data.views,function(v,index){
         App.sectionList.push(new (App.View[v.view_id])({
             model:new App.Model.Page(v)
         }));
-
         App.config.viewRoot.append(App.sectionList[index].render().$el);
     });
-
-    $('.view').css('height', $('.view-wrapper').innerHeight());
-
-    App.prerenderView(0,App.sectionList[0].callback);
+    if(App.sectionList.length!=0){
+        $('.view').css('height', $('.view-wrapper').innerHeight());
+        App.prerenderView(0,App.sectionList[0].callback);
+    }
 }
 
 App.prerenderView = function(viewIndex,callback){
     if(App.sectionList[viewIndex].isPrerender)return;
-    var data = App.SiteData.attributes || [];
+    var data = App.SiteData.get('views') || [];
     var resource = data[viewIndex].data.img;
     var queue = new Queue(viewIndex,callback);
     _.forEach(resource,function(url){
@@ -121,37 +134,26 @@ App.Router = new (Backbone.Router.extend({
         this.route('', 'index');
         this.route(/^site\/(\w+)$/, 'getSiteData');
     },
-    
     index: function() {
-        console.log('index');
-        this.navigate("/site/dolphin");
+        //检验用户登录信息
+        
+        //跳转登录注册页面
     },
     getSiteData: function(site_id) {
         if(typeof sever_data=='undefined'){
-            App.SiteData = new App.Model.Site({
-                url:App.config.APIHost+'/theme/'+site_id+'/data-'+site_id+'.js'
-            });
+            App.SiteData = new App.Model.Site({});
 
             App.SiteData.fetch({
+                url:'http://192.168.1.7:9000/siteapi/site_name/'+site_id+'/',
                 success:function(data){
-                    console.log(data);
+                    sever_data=data.toJSON();
+                    App.loadScript(site_id);
                 }
             });
         }
         else{
-            App.SiteData = new App.Model.Site(sever_data.views);
-            var counter = 4;
-            var callback = function(){
-                counter--;
-                if(counter==0){
-                    App.start();
-                }
-            }
-            var theme_id = sever_data.theme_type;
-            App.loadFile('css','/theme/'+theme_id+'/theme-'+site_id+'.css').onload=callback;
-            App.loadFile('script','/theme/'+theme_id+'/template-'+site_id+'.js').onload=callback;
-            App.loadFile('script','/theme/'+theme_id+'/view-'+site_id+'.js').onload=callback;
-            App.loadFile('script','/theme/'+theme_id+'/application-'+site_id+'.js').onload=callback;
+            App.SiteData = new App.Model.Site(sever_data);
+            App.loadScript(site_id);
         }
     }
 }))();
@@ -173,6 +175,19 @@ App.Model = Backbone.Model.extend({
         } else {
             var origUrl = Backbone.Model.prototype.url.call(this);
             return origUrl + (origUrl.charAt(origUrl.length - 1) == '/' ? '' : '/');
+        }
+    }
+});
+
+App.Collection = Backbone.Collection.extend({
+    parse: function(response) {
+        if (response.results != null) {
+            this.count = response.count;
+            this.previous = response.previous;
+            this.next = response.next;
+            return response.results;
+        } else {
+            return response;
         }
     }
 });

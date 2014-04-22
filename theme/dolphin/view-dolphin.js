@@ -164,8 +164,8 @@
         },
         initPageView: function() {
             var API = 'http://api.toplist.oatpie.com/lovemessages/message/';
-            var Message = Backbone.Model.extend({ urlRoot: API });
-            var Messages = Backbone.Collection.extend({ url: API, model: Message });
+            var Message = App.Model.extend({ urlRoot: API });
+            var Messages = App.Collection.extend({ url: API, model: Message });
             this.messages = new Messages();
             this.listenTo(this.messages, 'add', this.addMessage);
             this.listenTo(this.messages, 'reset', this.renderMessages);

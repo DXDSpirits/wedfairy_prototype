@@ -16,25 +16,38 @@ App.start = function(){
    App.initApplication();
 }
 
-App.initDom = function(){
+App.loadScript = function(site_id){
+  var counter = 4;
+  var callback = function(){
+      counter--;
+      if(counter==0){
+          App.start();
+      }
+  }
+  var theme_id = sever_data.theme_type;
+  App.loadFile('css','/theme/'+theme_id+'/theme-'+site_id+'.css').onload=callback;
+  App.loadFile('script','/theme/'+theme_id+'/template-'+site_id+'.js').onload=callback;
+  App.loadFile('script','/theme/'+theme_id+'/view-'+site_id+'.js').onload=callback;
+  App.loadFile('script','/theme/'+theme_id+'/application-'+site_id+'.js').onload=callback;
+}
 
+App.initDom = function(){
     var data = App.SiteData.attributes || [];
-    _.forEach(data,function(v,index){
+    _.forEach(data.views,function(v,index){
         App.sectionList.push(new (App.View[v.view_id])({
             model:new App.Model.Page(v)
         }));
-
         App.config.viewRoot.append(App.sectionList[index].render().$el);
     });
-
-    $('.view').css('height', $('.view-wrapper').innerHeight());
-
-    App.prerenderView(0,App.sectionList[0].callback);
+    if(App.sectionList.length!=0){
+        $('.view').css('height', $('.view-wrapper').innerHeight());
+        App.prerenderView(0,App.sectionList[0].callback);
+    }
 }
 
 App.prerenderView = function(viewIndex,callback){
     if(App.sectionList[viewIndex].isPrerender)return;
-    var data = App.SiteData.attributes || [];
+    var data = App.SiteData.get('views') || [];
     var resource = data[viewIndex].data.img;
     var queue = new Queue(viewIndex,callback);
     _.forEach(resource,function(url){

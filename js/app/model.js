@@ -20,6 +20,19 @@ App.Model = Backbone.Model.extend({
     }
 });
 
+App.Collection = Backbone.Collection.extend({
+    parse: function(response) {
+        if (response.results != null) {
+            this.count = response.count;
+            this.previous = response.previous;
+            this.next = response.next;
+            return response.results;
+        } else {
+            return response;
+        }
+    }
+});
+
 App.Model.Site = App.Model.extend({});
 
 App.Model.Page = App.Model.extend({
