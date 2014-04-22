@@ -1,50 +1,6 @@
 (function(App){
 
     window.App = App;
-
-    App.View = Backbone.View.extend({
-        initialize: function() {
-            if (this.initView) this.initView();
-        },
-        displayError: function($el, text) {
-            try {
-                var error = JSON.parse(text);
-                for (var k in error) { $el.html(error[k]);  break; };
-            } catch (e) {
-                $el.text(text || 'Error');
-            }
-        }
-    });
-
-    App.View.Section = App.View.extend({
-        template: Mustache.compile(""),
-        isPrerender:false,
-        tagName:'section',
-        className:'view text-center',
-        initView: function() {
-            if (this.model) {
-                this.listenTo(this.model, 'change', this.render);
-                this.listenTo(this.model, 'enter', this.onEnter);
-                this.listenTo(this.model, 'leave', this.onLeave);
-            }
-            if(this.initPageView){
-                this.initPageView();
-            }
-            _.bindAll(this,"onEnter","onLeave","callback");
-        },
-        render:function(){
-            this.renderTemplate(this.model.get('data'));
-            return this;
-        },
-        renderTemplate: function(attrs){
-            this.$el.html(this.template(attrs || {}));
-        },
-        onEnter: function() {},
-        onLeave: function() {},
-        callback:function() {
-            console.log('complete');
-        }
-    });
    
     /**
      * View Hero
@@ -207,12 +163,12 @@
             'submit form': 'sendMessage'
         },
         initPageView: function() {
-            //var API = 'http://api.toplist.oatpie.com/lovemessages/message/';
-            //var Message = Model.extend({ urlRoot: API });
-            //var Messages = Collection.extend({ url: API, model: Message });
-            //this.messages = new Messages();
-            //this.listenTo(this.messages, 'add', this.addMessage);
-            //this.listenTo(this.messages, 'reset', this.renderMessages);
+            var API = 'http://api.toplist.oatpie.com/lovemessages/message/';
+            var Message = Backbone.Model.extend({ urlRoot: API });
+            var Messages = Backbone.Collection.extend({ url: API, model: Message });
+            this.messages = new Messages();
+            this.listenTo(this.messages, 'add', this.addMessage);
+            this.listenTo(this.messages, 'reset', this.renderMessages);
         },
         renderMessages: function() {
             var $list = [];

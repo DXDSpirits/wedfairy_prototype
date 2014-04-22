@@ -20,7 +20,7 @@ App.initDom = function(){
 
     var data = App.SiteData.attributes || [];
     _.forEach(data,function(v,index){
-        App.sectionList.push(new (App.View[v.view])({
+        App.sectionList.push(new (App.View[v.view_id])({
             model:new App.Model.Page(v)
         }));
 
@@ -35,7 +35,7 @@ App.initDom = function(){
 App.prerenderView = function(viewIndex,callback){
     if(App.sectionList[viewIndex].isPrerender)return;
     var data = App.SiteData.attributes || [];
-    var resource = data[viewIndex].img;
+    var resource = data[viewIndex].data.img;
     var queue = new Queue(viewIndex,callback);
     _.forEach(resource,function(url){
         queue.push(url);

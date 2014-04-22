@@ -26,6 +26,7 @@ module.exports = function(grunt) {
                     'js/app/app-start.js',
                     'js/app/router.js',
                     'js/app/model.js',
+                    'js/app/view.js',
                     'js/app/app-end.js'
                 ],
                 dest: 'js/app-core.js'

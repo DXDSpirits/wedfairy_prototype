@@ -9,7 +9,7 @@ App.Router = new (Backbone.Router.extend({
         this.navigate("/site/dolphin");
     },
     getSiteData: function(site_id) {
-        if(!sever_data){
+        if(typeof sever_data=='undefined'){
             App.SiteData = new App.Model.Site({
                 url:App.config.APIHost+'/theme/'+site_id+'/data-'+site_id+'.js'
             });
@@ -21,7 +21,7 @@ App.Router = new (Backbone.Router.extend({
             });
         }
         else{
-            App.SiteData = new App.Model.Site(sever_data.view);
+            App.SiteData = new App.Model.Site(sever_data.views);
             var counter = 4;
             var callback = function(){
                 counter--;

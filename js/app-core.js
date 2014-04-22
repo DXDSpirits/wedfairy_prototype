@@ -72,7 +72,7 @@ App.initDom = function(){
 
     var data = App.SiteData.attributes || [];
     _.forEach(data,function(v,index){
-        App.sectionList.push(new (App.View[v.view])({
+        App.sectionList.push(new (App.View[v.view_id])({
             model:new App.Model.Page(v)
         }));
 
@@ -87,7 +87,7 @@ App.initDom = function(){
 App.prerenderView = function(viewIndex,callback){
     if(App.sectionList[viewIndex].isPrerender)return;
     var data = App.SiteData.attributes || [];
-    var resource = data[viewIndex].img;
+    var resource = data[viewIndex].data.img;
     var queue = new Queue(viewIndex,callback);
     _.forEach(resource,function(url){
         queue.push(url);
@@ -127,7 +127,7 @@ App.Router = new (Backbone.Router.extend({
         this.navigate("/site/dolphin");
     },
     getSiteData: function(site_id) {
-        if(!sever_data){
+        if(typeof sever_data=='undefined'){
             App.SiteData = new App.Model.Site({
                 url:App.config.APIHost+'/theme/'+site_id+'/data-'+site_id+'.js'
             });
@@ -139,7 +139,7 @@ App.Router = new (Backbone.Router.extend({
             });
         }
         else{
-            App.SiteData = new App.Model.Site(sever_data.view);
+            App.SiteData = new App.Model.Site(sever_data.views);
             var counter = 4;
             var callback = function(){
                 counter--;
@@ -184,5 +184,48 @@ App.Model.Page = App.Model.extend({
     controller:"",
     data:{},
     img:[]
+});
+App.View = Backbone.View.extend({
+    initialize: function() {
+        if (this.initView) this.initView();
+    },
+    displayError: function($el, text) {
+        try {
+            var error = JSON.parse(text);
+            for (var k in error) { $el.html(error[k]);  break; };
+        } catch (e) {
+            $el.text(text || 'Error');
+        }
+    }
+});
+
+App.View.Section = App.View.extend({
+    template: Mustache.compile(""),
+    isPrerender:false,
+    tagName:'section',
+    className:'view text-center',
+    initView: function() {
+        if (this.model) {
+            this.listenTo(this.model, 'change', this.render);
+            this.listenTo(this.model, 'enter', this.onEnter);
+            this.listenTo(this.model, 'leave', this.onLeave);
+        }
+        if(this.initPageView){
+            this.initPageView();
+        }
+        _.bindAll(this,"onEnter","onLeave","callback");
+    },
+    render:function(){
+        this.renderTemplate(this.model.get('data').text);
+        return this;
+    },
+    renderTemplate: function(attrs){
+        this.$el.html(this.template(attrs || {}));
+    },
+    onEnter: function() {},
+    onLeave: function() {},
+    callback:function() {
+        console.log('complete');
+    }
 });
 });

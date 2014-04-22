@@ -6,7 +6,7 @@ var sever_data={
 	"theme_type":"origin",
 	"view":[
 		{
-			"view":"Hero",
+			"view_id":"Hero",
 			"controller":"Hero",
 			"data":{},
 			"img":[
@@ -15,7 +15,7 @@ var sever_data={
 			]
 		},
 		{
-			"view":"TheGirl",
+			"view_id":"TheGirl",
 			"controller":"TheGirl",
 			"data":{
 				"text":"小丫丫，别再躲藏，跟叔叔阿姨们打个招呼"
@@ -27,7 +27,7 @@ var sever_data={
 			]
 		},
 		{
-			"view":"TheBigDay",
+			"view_id":"TheBigDay",
 			"controller":"TheBigDay",
 			"data":{
 				"paragraph":[
@@ -40,7 +40,7 @@ var sever_data={
 			"img":[]
 		},
 		{
-			"view":"Proposal",
+			"view_id":"Proposal",
 			"controller":"Proposal",
 			"data":{},
 			"img":[
@@ -49,7 +49,7 @@ var sever_data={
 			]
 		},
 		{
-			"view":"GoodNight",
+			"view_id":"GoodNight",
 			"controller":"GoodNight",
 			"data":{},
 			"img":[
@@ -57,13 +57,13 @@ var sever_data={
 			]
 		},
 		{
-			"view":"GoodMorning",
+			"view_id":"GoodMorning",
 			"controller":"GoodMorning",
 			"data":{"title":"GoodMorning"},
 			"img":[]
 		},
 		{
-			"view":"LaVie",
+			"view_id":"LaVie",
 			"controller":"LaVie",
 			"data":{"title":"Meet our life"},
 			"img":[
@@ -72,7 +72,7 @@ var sever_data={
 			]
 		},
 		{
-			"view":"Honeymoon",
+			"view_id":"Honeymoon",
 			"controller":"Honeymoon",
 			"data":{},
 			"img":[
@@ -80,7 +80,7 @@ var sever_data={
 			]
 		},
 		{
-			"view":"Contact",
+			"view_id":"Contact",
 			"controller":"Contact",
 			"data":{},
 			"img":[]
