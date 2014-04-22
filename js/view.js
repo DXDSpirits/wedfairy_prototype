@@ -2,16 +2,42 @@
 
     window.App = App;
 
-    App.View = App.View||{};
+    App.View = Backbone.View.extend({
+        initialize: function() {
+            if (this.initView) this.initView();
+        },
+        displayError: function($el, text) {
+            try {
+                var error = JSON.parse(text);
+                for (var k in error) { $el.html(error[k]);  break; };
+            } catch (e) {
+                $el.text(text || 'Error');
+            }
+        }
+    });
 
-    App.View.Section = Backbone.View.extend({
+    App.View.Section = App.View.extend({
         template: Mustache.compile(""),
         isPrerender:false,
         tagName:'section',
         className:'view text-center',
-        render: function(attrs){
-            this.$el.html(this.template(attrs || {}));
+        initView: function() {
+            if (this.model) {
+                this.listenTo(this.model, 'change', this.render);
+                this.listenTo(this.model, 'enter', this.onEnter);
+                this.listenTo(this.model, 'leave', this.onLeave);
+            }
+            if(this.initPageView){
+                this.initPageView();
+            }
+            _.bindAll(this,"onEnter","onLeave","callback");
+        },
+        render:function(){
+            this.renderTemplate(this.model.get('data'));
             return this;
+        },
+        renderTemplate: function(attrs){
+            this.$el.html(this.template(attrs || {}));
         },
         onEnter: function() {},
         onLeave: function() {},
@@ -19,25 +45,22 @@
             console.log('complete');
         }
     });
-    /**
-     * 加model，改成model出发onenter，onleave
-     */
     
     /**
      * View Hero
      */
-    App.View.Hero = new (App.View.Section.extend({
+    App.View.Hero = App.View.Section.extend({
         template:TPL['hero'],
         id:'Hero'
-    }))();
+    });
 
     /**
      * View TheGirl
      */
-    App.View.TheGirl = new (App.View.Section.extend({
+    App.View.TheGirl = App.View.Section.extend({
         template:TPL['thegirl'],
         id:'TheGirl',
-        initialize: function() {
+        initPageView: function() {
             _.bindAll(this, 'switchGirlPhoto', 'resetGirlPhoto');
         },
         switchGirlPhoto: function() {
@@ -49,19 +72,17 @@
         onEnter: function() {
             this.$('.shy-girl').addClass('invisible');
             this.$('.love-cross').addClass('crossed');
-            //scroller.on('scrollStart', this.switchGirlPhoto);
-            //scroller.on('scrollEnd', this.resetGirlPhoto);
         },
         onLeave: function() {
             this.$('.shy-girl').removeClass('invisible');
             this.$('.love-cross').removeClass('crossed');
         }
-    }))();
+    });
 
     /**
      * View TheBigDay
      */
-    App.View.TheBigDay = new (App.View.Section.extend({
+    App.View.TheBigDay = App.View.Section.extend({
         template:TPL['thebigday'],
         id:'TheBigDay',
         onEnter: function() {
@@ -84,12 +105,12 @@
                 'transform': 'translate3d(0, 0, 0)'
             });
         }
-    }))();
+    });
 
     /**
      * View Proposal
      */
-    App.View.Proposal = new (App.View.Section.extend({
+    App.View.Proposal = App.View.Section.extend({
         template:TPL['proposal'],
         id:'Proposal',
         onEnter: function() {
@@ -98,28 +119,28 @@
         onLeave: function() {
             this.$('.rose-cover').removeClass('animate');
         }
-    }))();
+    });
 
     /**
      * View GoodMorning
      */
-    App.View.GoodMorning = new (App.View.Section.extend({
+    App.View.GoodMorning = App.View.Section.extend({
         template:TPL['goodmorning'],
         id:'GoodMorning'
-    }))();
+    });
 
     /**
      * View GoodNight
      */
-    App.View.GoodNight = new (App.View.Section.extend({
+    App.View.GoodNight = App.View.Section.extend({
         template:TPL['goodnight'],
         id:'GoodNight'
-    }))();
+    });
 
     /**
      * View LaVie
      */
-    App.View.LaVie = new (App.View.Section.extend({
+    App.View.LaVie = App.View.Section.extend({
         template:TPL['lavie'],
         id:'LaVie',
         onEnter: function() {
@@ -130,22 +151,22 @@
             this.$('.cover').removeClass('flip');
             this.$('.bouquet').removeClass('slidein');
         }
-    }))();
+    });
 
     /**
      * View Honeymoon
      */
-    App.View.Honeymoon = new (App.View.Section.extend({
+    App.View.Honeymoon = App.View.Section.extend({
         template:TPL['honeymoon'],
         id:'Honeymoon'
-    }))();
+    });
 
     /**
      * View Contact
      */
-    App.View.Contact = new (App.View.Section.extend({
+    App.View.Contact = App.View.Section.extend({
         template:TPL['contact'],
         id:'Contact'
-    }))();
+    });
 
 })(window.App||{});

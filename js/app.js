@@ -19,8 +19,11 @@
 
         var data = sever_data || [];
         _.forEach(data,function(v,index){
-            App.sectionList.push(App.View[v.view]);
-            App.config.viewRoot.append(App.View[v.view].render(data[index].data).$el);
+            App.sectionList.push(new (App.View[v.view])({
+                model:new App.Model.Page(v)
+            }));
+
+            App.config.viewRoot.append(App.sectionList[index].render().$el);
         });
 
         $('.view').css('height', $('.view-wrapper').innerHeight());
@@ -46,9 +49,11 @@
         App.Scroller.on('scrollEnd', function() {
             var sectionList = App.sectionList;
             var page = App.Scroller.currentPage.pageY;
-            sectionList[page] && sectionList[page].onEnter();
-            sectionList[page+1] && sectionList[page+1].onLeave();
-            sectionList[page-1] && sectionList[page-1].onLeave();
+
+            sectionList[page] && sectionList[page].model.trigger('enter');
+            sectionList[page+1] && sectionList[page+1].model.trigger('leave');
+            sectionList[page-1] && sectionList[page-1].model.trigger('leave');
+
             if(App.sectionList[page+1]){
                 App.prerenderView(page+1,App.sectionList[page+1].callback);//??
             }
