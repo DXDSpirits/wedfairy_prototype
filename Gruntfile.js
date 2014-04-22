@@ -19,6 +19,16 @@ module.exports = function(grunt) {
                     'js/bootstrap/affix.js'
                 ],
                 dest: 'js/bootstrap.js'
+            },
+            app:{
+                src: [
+                    'js/app/queue.js',
+                    'js/app/app-start.js',
+                    'js/app/router.js',
+                    'js/app/model.js',
+                    'js/app/app-end.js'
+                ],
+                dest: 'js/app-core.js'
             }
         },
         sass: {
@@ -51,6 +61,10 @@ module.exports = function(grunt) {
             scripts_bootstrap: {
                 files: ['js/bootstrap/**/*.js'],
                 tasks: ['concat:bootstrap']
+            },
+            scripts_app: {
+                files: ['js/app/*.js'],
+                tasks: ['concat:app']
             },
             stylesheets_all: {
                 files: ['scss/bootstrap/*.scss', 'scss/_*.scss', 'scss/bootstrap.scss'],

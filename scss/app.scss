@@ -12,28 +12,28 @@
 
 @font-face {
     font-family: 'titan';
-    src: url('../fonts/TitanOne-Regular.ttf');
+    src: url('/fonts/TitanOne-Regular.ttf');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'lane';
-    src: url('../fonts/LANENAR.ttf');
+    src: url('/fonts/LANENAR.ttf');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'wide';
-    src: url('../fonts/DISCO.ttf');
+    src: url('/fonts/DISCO.ttf');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'greatvibes';
-    src: url('../fonts/GreatVibes.woff');
+    src: url('/fonts/GreatVibes.woff');
     font-weight: normal;
     font-style: normal;
 }
@@ -92,7 +92,7 @@ $yellow: #bfa260;
 }
 
 .view {
-    background: url(../img/body-bg-gray.jpg) repeat;
+    background: url(/img-origin/body-bg-gray.jpg) repeat;
     width: 100%;
     height: 0;
     overflow: hidden;
@@ -122,11 +122,11 @@ $yellow: #bfa260;
         background-repeat: no-repeat;
     }
     .carousel-in {
-        background-image: url('../img/lavande1.jpg');
+        background-image: url('/img-origin/lavande1.jpg');
         @include animation(fadein 5s alternate infinite);
     }
     .carousel-out {
-        background-image: url('../img/lavande2.jpg');
+        background-image: url('/img-origin/lavande2.jpg');
         @include animation(fadeout 5s alternate infinite);
     }
 }
@@ -137,7 +137,7 @@ $yellow: #bfa260;
         position: absolute;
         z-index: 1;
         @include square(100%);
-        background: url("../img/thegirl/2.jpg") no-repeat center;
+        background: url("/img-origin/thegirl/2.jpg") no-repeat center;
         background-size: cover;
         @include transition(all 1s ease-in-out);
     }
@@ -155,12 +155,12 @@ $yellow: #bfa260;
     }
     .img-the-girl {
         width: 50%;
-        background-image: url("../img/thegirl/4.jpg");
+        background-image: url("/img-origin/thegirl/4.jpg");
         //&.switch { background-image: url("../img/thegirl/2.jpg"); }
     }
     .img-the-boy {
         width: 50%;
-        background-image: url("../img/thegirl/5.jpg");
+        background-image: url("/img-origin/thegirl/5.jpg");
     }
     .heart {
         opacity: 0;
@@ -169,7 +169,7 @@ $yellow: #bfa260;
         position: absolute;
         top: 0;
         left: 45%;
-        background: url("../img/heart-cross-pink.png") no-repeat center;
+        background: url("/img-origin/heart-cross-pink.png") no-repeat center;
         background-size: contain;
     }
     .love-cross {
@@ -263,11 +263,11 @@ $yellow: #bfa260;
         width: 100%;
         height: 50%;
         &.top {
-            background-image: url("../img/rose-top.jpg");
+            background-image: url("/img-origin/rose-top.jpg");
             background-position: center bottom;
         }
         &.bottom {
-            background-image: url("../img/rose-bottom.jpg");
+            background-image: url("/img-origin/rose-bottom.jpg");
             background-position: center top;
         }
         &.animate {
@@ -291,7 +291,7 @@ $yellow: #bfa260;
     .nightsky-image {
         width: 100%;
         height: 1800%;
-        background: url("../img/nightsky-infinite.jpg") repeat top;
+        background: url("/img-origin/nightsky-infinite.jpg") repeat top;
         background-size: contain;
     }
 }
@@ -308,7 +308,7 @@ $yellow: #bfa260;
             bottom: -20px;
             width: 100%;
             height: 20px;
-            background: url("../img/rip.png") no-repeat center top;
+            background: url("/img-origin/rip.png") no-repeat center top;
             background-size: cover;
         }
     }
@@ -327,7 +327,7 @@ $yellow: #bfa260;
         overflow: hidden;
         width: 100%;
         height: 100%;
-        background: url("../img/cover-page-light.jpg") no-repeat;
+        background: url("/img-origin/cover-page-light.jpg") no-repeat;
         background-size: 100% 100%;
         //box-shadow: 0 -2px 6px 0 #000;
     }
@@ -335,7 +335,7 @@ $yellow: #bfa260;
         overflow: hidden;
         width: 100%;
         height: 100%;
-        background: #fff url("../img/cover-page-dark.jpg") no-repeat;
+        background: #fff url("/img-origin/cover-page-dark.jpg") no-repeat;
         background-size: 100% 100%;
         //box-shadow: 0 0 2px 0 #000;
         @include rotateX(-180deg);
@@ -373,7 +373,7 @@ $yellow: #bfa260;
 #Honeymoon {
     > header {
         height: 200px;
-        background: url(../img/sunset.jpg) no-repeat left center;
+        background: url(/img-origin/sunset.jpg) no-repeat left center;
         background-size: cover;
         position: relative;
         &::after {
