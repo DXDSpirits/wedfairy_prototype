@@ -19,6 +19,7 @@
         onEnter: function() {
             this.$('.shy-girl').addClass('invisible');
             this.$('.love-cross').addClass('crossed');
+            this.play();
         },
         onLeave: function() {
             this.$('.shy-girl').removeClass('invisible');
@@ -76,6 +77,7 @@
         onEnter: function() {
             this.$('.rose-cover').addClass('animate');
             this.$('.the-ring').addClass('animate');
+            this.play();
         },
         onLeave: function() {
             this.$('.rose-cover').removeClass('animate');
@@ -113,10 +115,11 @@
             });
         },
         onEnter: function() {
-            this.$('.gallery-inner').removeClass('animate').css({
-                '-webkit-transform': 'translate3d(0, 0, 0)',
-                'transform': 'translate3d(0, 0, 0)'
-            });
+            // this.$('.gallery-inner').removeClass('animate').css({
+            //     '-webkit-transform': 'translate3d(0, 0, 0)',
+            //     'transform': 'translate3d(0, 0, 0)'
+            // });
+            this.play();
         },
         onLeave: function() {
             this.$('.gallery-inner').removeClass('animate').css({
