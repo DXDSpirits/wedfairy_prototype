@@ -33,7 +33,16 @@ App.Collection = Backbone.Collection.extend({
     }
 });
 
-App.Model.Site = App.Model.extend({});
+App.Model.Site = App.Model.extend({
+    parse:function(data){
+    console.log(data)
+        for(var index in data.views){
+            var string=data.views[index].data;
+            data.views[index].data=JSON.parse(string);
+        }
+        return data;
+    }
+});
 
 App.Model.Page = App.Model.extend({
     view:"",

@@ -132,28 +132,27 @@ App.loadFile = function(filetype,filename){
 App.Router = new (Backbone.Router.extend({
     initialize: function(){
         this.route('', 'index');
-        this.route(/^site\/(\w+)$/, 'getSiteData');
+        this.route(/^site\/(\w+)\/$/, 'getSiteData');
     },
     index: function() {
         //检验用户登录信息
         
         //跳转登录注册页面
     },
-    getSiteData: function(site_id) {
+    getSiteData: function(site_name) {
         if(typeof sever_data=='undefined'){
             App.SiteData = new App.Model.Site({});
-
             App.SiteData.fetch({
-                url:'http://192.168.1.7:9000/siteapi/site_name/'+site_id+'/',
+                url:'http://192.168.1.7:9000/siteapi/site_name/'+site_name+'/',
                 success:function(data){
                     sever_data=data.toJSON();
-                    App.loadScript(site_id);
+                    App.loadScript(site_name);
                 }
             });
         }
         else{
             App.SiteData = new App.Model.Site(sever_data);
-            App.loadScript(site_id);
+            App.loadScript(site_name);
         }
     }
 }))();
@@ -192,7 +191,16 @@ App.Collection = Backbone.Collection.extend({
     }
 });
 
-App.Model.Site = App.Model.extend({});
+App.Model.Site = App.Model.extend({
+    parse:function(data){
+    console.log(data)
+        for(var index in data.views){
+            var string=data.views[index].data;
+            data.views[index].data=JSON.parse(string);
+        }
+        return data;
+    }
+});
 
 App.Model.Page = App.Model.extend({
     view:"",
