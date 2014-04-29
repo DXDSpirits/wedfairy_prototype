@@ -3,19 +3,22 @@ Development stuff
 
 - Prerequisites
 
-	- Install nodejs and git
+    - Install nodejs and git
 
 	- Install Grunt's command line interface
 
 			npm install -g grunt-cli
 
   - Install mongodb
-  
+      
+      http://www.mongodb.org/
+ 
   - Restore data
   
-      cd invitation
-      mongorestore -h 127.0.0.1 -d invitation -directoryperdb ./invitation
-	- Prepare Project
+            cd invitation
+            mongorestore -h 127.0.0.1 -d invitation -directoryperdb ./invitation
+      
+ - Prepare Project
 
 			git clone git@github.com:Potato2009/invitation.git
 			cd invitation
