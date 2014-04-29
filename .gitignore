@@ -2,6 +2,6 @@
 .project
 .sass-cache
 
-/js/bootstrap.js
-/css/
-/index.html
+/mongodb/
+/public/css/
+/public/js/
