@@ -64,6 +64,63 @@ App.bindEvent = function(){
         App.ProgressView.show();
         App.ProgressView.displayInfo('更新数据');
         App.ProgressView.displayProgress(0);
+        var progressImage = function(){
+            $.get('/upload/image/token/',function(data){
+                App.ProgressView.displayInfo('上传图片');
+                App.ProgressView.displayProgress(0);
+                var token = data.uptoken;
+                var length = $('input[type=file]').length;
+                var current = 0;
+                var updateProgress = function(){
+                    current++;
+                    var p=(current/length*100).toFixed(2);
+                    App.ProgressView.displayProgress(p);
+                    if(current==length){
+                        $.ajax({  
+                            type: "POST",  
+                            dataType: "json",  
+                            url: "/data/origin",  
+                            data: {json:JSON.stringify(App.SiteData.toJSON())},
+                            success:function(){
+                                App.ProgressView.displayInfo('Complete!');
+                                setTimeout(function(){
+                                    App.ProgressView.hide();
+                                },500)
+                            }
+                        }); 
+                    }   
+                };
+                if(length==0){
+                    length=1;
+                    current=0;
+                    updateProgress();
+                }
+                else{               
+                    $('input[type=file]').each(function(index,e){
+                        if($(e).attr('upload')=='false'){
+                            var data_index = $(e).parents('.img').attr('data-index');
+                            var view_id = $('section.view').index($(e).parents('.view'));
+                            App.SiteData.toJSON().views[view_id].data.img[data_index] = '';
+                            updateProgress();     
+                        }
+                        else{
+                            var data_index = $(e).parents('.img').attr('data-index');
+                            var view_id = $('section.view').index($(e).parents('.view'));
+                            var files = $(e).get(0).files;
+                            if (files.length > 0 && token != "") {
+                                App.uploadImage(files[0], token,view_id,data_index,function(){
+                                    updateProgress(); 
+                                });
+                            }
+                            else {
+                                updateProgress();
+                                console && console.log("form input error");
+                            }
+                        }
+                    });
+                }
+            });            
+        };
         App.SiteData.update({
             success:function(){
                 setTimeout(function(){
@@ -71,62 +128,10 @@ App.bindEvent = function(){
                 },0);
                 setTimeout(function(){
                     App.ProgressView.displayProgress(100);
-                },200);
-            }
-        });
-        //image upload
-        $.get('/upload/image/token/',function(data){
-            App.ProgressView.displayInfo('上传图片');
-            App.ProgressView.displayProgress(0);
-            var token = data.uptoken;
-            var length = $('input[type=file]').length;
-            var current = 0;
-            var updateProgress = function(){
-                current++;
-                App.ProgressView.displayProgress(current/length*100);//?????
-                if(current==length){
-                    $.ajax({  
-                        type: "POST",  
-                        dataType: "json",  
-                        url: "/data/origin",  
-                        data: {json:JSON.stringify(App.SiteData.toJSON())},
-                        success:function(){
-                            App.ProgressView.displayInfo('Complete!');
-                            setTimeout(function(){
-                                App.ProgressView.hide();
-                            },500)
-                        }
-                    }); 
-                }   
-            };
-            if(length==0){
-                length=1;
-                current=0;
-                updateProgress();
-            }
-            else{               
-                $('input[type=file]').each(function(index,e){
-                    if($(e).attr('upload')=='false'){
-                        var data_index = $(e).parents('.img').attr('data-index');
-                        var view_id = $('section.view').index($(e).parents('.view'));
-                        App.SiteData.toJSON().views[view_id].data.img[data_index] = '';
-                        updateProgress();     
-                    }
-                    else{
-                        var data_index = $(e).parents('.img').attr('data-index');
-                        var view_id = $('section.view').index($(e).parents('.view'));
-                        var files = $(e).get(0).files;
-                        if (files.length > 0 && token != "") {
-                            App.uploadImage(files[0], token,view_id,data_index,function(){
-                                updateProgress(); 
-                            });
-                        }
-                        else {
-                            updateProgress();
-                            console && console.log("form input error");
-                        }
-                    }
-                });
+                },300);
+                setTimeout(function(){
+                    progressImage();
+                },600);
             }
         });
     }); 
