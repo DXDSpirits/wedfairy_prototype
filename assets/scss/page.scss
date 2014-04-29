@@ -1,0 +1,165 @@
+// Core variables and mixins
+@import "variables-custom";
+@import "bootstrap/variables";
+@import "mixins-custom";
+@import "bootstrap/mixins";
+
+$imageRoot: 'http://oatpie.qiniudn.com/jimmy/';
+$pink: #fc9d9a;
+$blue: #506873;
+$violet: #633E54;
+$yellow: #bfa260;
+
+#bigday {
+    height: 500px;
+    position: relative;
+    background: url(#{$imageRoot}img/lu/wedding.jpg) no-repeat center;
+    background-size: cover;
+    background-position: top;
+    color: #fff;
+    .gap {
+        position: relative;
+        margin-top: 200px;
+    }
+    h3 {
+        text-shadow: 0 0 5px rgba(0, 0, 0, .9);
+    }
+}
+
+#hero {
+    background: $pink url(#{$imageRoot}img/dotted.png) repeat;
+    color: #ffffff;
+    > img {
+        margin-top: 20px
+    }
+    .jimmy-and-sherry {
+        border-bottom: 1px solid #fff;
+        padding-bottom: 10px;
+    }
+}
+
+#couple {
+    background: $blue;
+    color: #fff;
+    padding: 20px 0;
+    font-size: .9em;
+    line-height: 1.2;
+}
+
+#where {
+    height: 600px;
+    background: url(#{$imageRoot}img/lu/xianhengjiudian.jpg) no-repeat bottom right;
+    background-size: cover;
+    position: relative;
+    padding-bottom: 50px;
+    .address-wrapper {
+        position: absolute;
+        z-index: 1;
+        top: 50px;
+        left: 20%;
+        @include square(250px);
+        border-radius: 50%;
+        border: 25px solid #2d3b44;
+        //border-color: rgba(45, 59, 68, .3);
+        overflow: hidden;
+    }
+    address {
+        @include square(100%);
+        border-radius: 50%;
+        overflow: hidden;
+        padding: 40px 15px;
+        background: $pink url(#{$imageRoot}img/dotted.png) repeat;
+        color: #fff;
+        h4 {
+            margin-bottom: 30px;
+        }
+    }
+    .anchorBL {
+        display: none !important;
+    }
+}
+
+#information {
+    background-image: url(#{$imageRoot}img/etoiles.png);
+    background-color: $violet;
+    background-repeat: repeat;
+    background-position: top center;
+    background-size: contain;
+    color: #f0f0f0;
+    padding-bottom: 30px;
+    dl {
+        @include clearfix();
+        margin-top: 20px;
+        margin-bottom: 0;
+    }
+    dt {
+        float: left;
+        margin-right: 10px;
+    }
+    dd {
+        margin-left: 30px;
+        margin-bottom: 20px;
+    }
+}
+
+#perfect-day {
+    background: #e7adac;
+    color: #ffffff;
+    background-size: cover;
+    padding-bottom: 50px;
+    position: relative;
+    > img {
+        margin: 20px 0;
+    }
+}
+
+#contact {
+    padding: 0 20px;
+    .thanks {
+        font-size: .9em;
+        margin-top: 0;
+        padding-top: 10px;
+        border-top: 1px solid lighten($pink, 10%);
+        border-bottom: 1px solid lighten($pink, 10%);
+    }
+    article {
+        max-width: 500px;
+        @include center-block();
+    }
+    .copyright {
+        margin: 20px -20px 10px;
+        padding-top: 10px;
+        border-top: 1px solid lighten($pink, 10%);
+    }
+    .btn {
+        background: lighten($pink, 17%);
+        border-color: lighten($pink, 17%);
+        color: $pink;
+        box-shadow: none;
+        &:active {
+            box-shadow: none;
+            background: lighten($pink, 15%);
+        }
+    }
+    textarea {
+        margin-top: 20px;
+        background: lighten($pink, 18%);
+        border-color: lighten($pink, 18%);
+        color: darken($pink, 10%);
+        padding: 15px 10px;
+        box-shadow: none;
+        -webkit-appearance: none;
+        @include placeholder(lighten($pink, 10%));
+    }
+    .messages {
+        color: $pink;
+        .fa-heart-o {
+            margin-right: 10px;
+        }
+        margin: 10px 20px;
+        max-height: 200px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+    }
+}

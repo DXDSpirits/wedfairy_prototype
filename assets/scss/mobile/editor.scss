@@ -1,0 +1,108 @@
+#editor-view{
+	#page_sidebar{
+		width:40px;
+		position:absolute;
+		z-index:99;
+		left:0;
+		top:44px;
+		.pages-list-view-item{
+			width:100%;
+			font-size:20px;
+			height:40px;
+			line-height:40px;
+			text-align: center;
+	    	background-color:#e9e9e9;
+	    	border-bottom:1px solid #aaa;
+	    	&:first-child{
+	    		border-top:1px solid #aaa;
+	    	}
+	    	@include box-sizing(border-box);
+		}
+		>.pages-list-view-item.active{
+			color:#fff;
+			background-color:#000;
+		}
+	}
+
+	#page_preview{
+		width:320px;
+		//width:280px;
+		//margin-left:40px;
+		//overflow:hidden;
+		overflow-x:hidden;
+		overflow-y:scroll;
+		-webkit-overflow-scrolling: touch;
+		position:relative;
+		.view{
+			position:relative;
+		}
+		[data-edit=text-enable],[data-edit=image-enable]{
+			border:1px dashed red;
+		}
+		.item-remove,.item-plus{
+			display:none;
+		}
+		[data-item]{
+			position:relative;
+			min-height:30px;
+		}
+		[data-item] [data-edit=text-enable]{
+			min-height:20px;
+		}
+		[data-edit=paragraph-enable] .item-remove,[data-edit=paragraph-enable] .item-plus{
+			display:block;
+			background-color:#000;
+			color:#fff;
+			width:20px;
+			height:20px;
+			font-size:22px;
+			text-align:center;
+			line-height:20px;
+			border-radius:10px;
+			position:absolute;
+			top:50%;
+			margin-top:-10px;
+			left:-10px;
+		}
+		.img{
+			position:relative;
+			.tag-group{
+				position:absolute;
+				width:122px;
+				top:-35px;
+				left:0;
+				-webkit-user-select:none;
+				@include clearfix();
+			}
+			.tag{
+				position:relative;
+				float:left;
+				text-align:center;
+				background-color:#000;
+				color:#fff;
+				width:60px;
+				height:30px;
+				line-height:30px;
+				&:active{
+					background-color:grey;
+				}
+			}
+			.tag.change{
+				border-radius:5px 0 0 5px;
+				margin-right:2px;
+			}
+			.tag.empty{
+				border-radius:0 5px 5px 0;
+			}
+			.tag.change input[type=file]{
+				position:absolute;
+				opacity:0;
+				top:0;
+				left:0;
+				width:60px;
+				height:30px;
+			}
+		}
+	}
+
+}

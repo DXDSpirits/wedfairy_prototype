@@ -1,0 +1,88 @@
+// Core variables and mixins
+@import "variables-custom";
+@import "bootstrap/variables";
+@import "mixins-custom";
+@import "bootstrap/mixins";
+
+// Font Awesome
+@import "font-awesome/font-awesome";
+
+//********************************************//
+$imageRoot: 'http://oatpie.qiniudn.com/jimmy/';
+$pink: #fc9d9a;
+$blue: #506873;
+$violet: #633E54;
+$yellow: #bfa260;
+
+@font-face {
+    font-family: 'titan';
+    src: url('../fonts/TitanOne-Regular.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'lane';
+    src: url('../fonts/LANENAR.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'greatvibes';
+    src: url('../fonts/GreatVibes.woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'wide';
+    src: url('../fonts/DISCO.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.wide-text {
+    font-family: wide, sans-serif;
+}
+
+.pink-text {
+    color: lighten($pink, 0%);
+}
+
+.script {
+    font-family: greatvibes, sans-serif;
+}
+
+.signature {
+    font-family: titan, sans-serif;
+}
+
+@-webkit-keyframes bulle_flow {
+    0% { -webkit-transform: translate3d(0, 0, 0); }
+    100% { -webkit-transform: translate3d(0, 10px, 0); }
+}
+
+@keyframes bulle_flow {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(0, 10px, 0); }
+}
+
+.view-wrapper {
+    width: 100%;
+}
+
+.view {
+    width: 100%;
+    padding: 20px;
+    overflow: hidden;
+    > header {
+        margin-bottom: 30px;
+        > h1 {
+            font-size: 70px;
+            @media (max-width: $screen-xs-max) {
+                font-size: 32px;
+            }
+        }
+    }
+}

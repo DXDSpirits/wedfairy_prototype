@@ -1,0 +1,35 @@
+<section class="view" id="couple">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-xs-6">
+                <h4 class="signature pink-text">THE GROOM</h4>
+                <div class="img" data-edit="image" data-index=0>
+                    <img data-src="/img-origin/boy.jpg" src="/img-origin/boy.jpg" class="img-responsive">
+                </div>
+                <h4 class="signature pink-text" data-edit="text" data-field="boy">{{boy}}</h4>
+            </div>
+            <div class="col-xs-6">
+                <h4 class="signature pink-text">THE BRIDE</h4>
+                <div class="img" data-edit="image" data-index=1>
+                    <img data-src="/img-origin/girl.jpg" src="/img-origin/girl.jpg" class="img-responsive">
+                </div>
+                <h4 class="signature pink-text" data-edit="text" data-field="girl">{{girl}}</h4>
+            </div>
+        </div>
+        <div data-edit="paragraph">
+            {{#paragraph}}
+            <div data-item >
+                <div class="row text-center">
+                    <div class="col-xs-6">
+                        <p data-edit="text" data-paragraph data-field="boy_desc">{{boy_desc}}</p>
+                    </div>
+                    <div class="col-xs-6">
+                        <p data-edit="text" data-paragraph data-field="girl_desc">{{girl_desc}}</p>
+                    </div>
+                </div>
+                <p class="text-center pink-text" data-paragraph data-edit="text" data-field="desc">{{desc}}</p>
+            </div>
+            {{/paragraph}}           
+        </div>
+    </div>
+</section>
