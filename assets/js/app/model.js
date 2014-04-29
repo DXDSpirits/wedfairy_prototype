@@ -41,7 +41,7 @@ App.Model.Site = App.Model.extend({
         // }
         return data;
     },
-    update:function(){
+    update:function(option){
         var origin_data = this.toJSON();
         _.forEach(origin_data.views,function(e,index){
             var view_id = e.view_id;
@@ -64,6 +64,7 @@ App.Model.Site = App.Model.extend({
             }
             e.data.text=text;
         });
+        if(option.success)option.success();
     },
     save:function(){
         console.log(this.toJSON());

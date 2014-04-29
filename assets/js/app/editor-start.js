@@ -57,54 +57,82 @@ App.initDom = function(){
 }
 
 App.bindEvent = function(){
+    App.ProgressView = new App.View.Progress({
+        el:$('#fullscreen')
+    });
     $('#done').click(function(){
-        //update date
-        App.SiteData.update();
+        App.ProgressView.show();
+        App.ProgressView.displayInfo('更新数据');
+        App.ProgressView.displayProgress(0);
+        App.SiteData.update({
+            success:function(){
+                setTimeout(function(){
+                    App.ProgressView.displayProgress(50);
+                },0);
+                setTimeout(function(){
+                    App.ProgressView.displayProgress(100);
+                },200);
+            }
+        });
         //image upload
         $.get('/upload/image/token/',function(data){
+            App.ProgressView.displayInfo('上传图片');
+            App.ProgressView.displayProgress(0);
             var token = data.uptoken;
-            $('input[type=file]').each(function(index,e){
-                if($(e).attr('upload')=='false'){
-                    var data_index = $(e).parents('.img').attr('data-index');
-                    var view_id = $('section.view').index($(e).parents('.view'));
-                    App.SiteData.toJSON().views[view_id].data.img[data_index] = '';                
-                }
-                else{
-                    var data_index = $(e).parents('.img').attr('data-index');
-                    var view_id = $('section.view').index($(e).parents('.view'));
-                    var files = $(e).get(0).files;
-                    if (files.length > 0 && token != "") {
-                        App.uploadImage(files[0], token,view_id,data_index);
+            var length = $('input[type=file]').length;
+            var current = 0;
+            var updateProgress = function(){
+                current++;
+                App.ProgressView.displayProgress(current/length*100);//?????
+                if(current==length){
+                    $.ajax({  
+                        type: "POST",  
+                        dataType: "json",  
+                        url: "/data/origin",  
+                        data: {json:JSON.stringify(App.SiteData.toJSON())},
+                        success:function(){
+                            App.ProgressView.displayInfo('Complete!');
+                            setTimeout(function(){
+                                App.ProgressView.hide();
+                            },500)
+                        }
+                    }); 
+                }   
+            };
+            if(length==0){
+                length=1;
+                current=0;
+                updateProgress();
+            }
+            else{               
+                $('input[type=file]').each(function(index,e){
+                    if($(e).attr('upload')=='false'){
+                        var data_index = $(e).parents('.img').attr('data-index');
+                        var view_id = $('section.view').index($(e).parents('.view'));
+                        App.SiteData.toJSON().views[view_id].data.img[data_index] = '';
+                        updateProgress();     
                     }
-                    else {
-                        console && console.log("form input error");
+                    else{
+                        var data_index = $(e).parents('.img').attr('data-index');
+                        var view_id = $('section.view').index($(e).parents('.view'));
+                        var files = $(e).get(0).files;
+                        if (files.length > 0 && token != "") {
+                            App.uploadImage(files[0], token,view_id,data_index,function(){
+                                updateProgress(); 
+                            });
+                        }
+                        else {
+                            updateProgress();
+                            console && console.log("form input error");
+                        }
                     }
-                }
-            });
+                });
+            }
         });
-        window.setTimeout(function(){
-            $.ajax({  
-                type: "POST",  
-                dataType: "json",  
-                url: "/data/origin",  
-                data: {json:JSON.stringify(App.SiteData.toJSON())}
-            });
-        },3000);
     }); 
 }
-// var progressbar = $("#progressbar"),
-//     progressLabel = $(".progress-label");
-// progressbar.progressbar({
-//     value: false,
-//     change: function() {
-//         progressLabel.text(progressbar.progressbar("value") + "%");
-//     },
-//     complete: function() {
-//         progressLabel.text("Complete!");
-//     }
-// });
 
-App.uploadImage = function(f,token,view_id,index) {
+App.uploadImage = function(f,token,view_id,index,callback) {
     var xhr = new XMLHttpRequest();
     xhr.open('POST',App.config.uploadUrl, true);
     var formData, startDate;
@@ -113,26 +141,6 @@ App.uploadImage = function(f,token,view_id,index) {
     formData.append('x:index', index);
     formData.append('token', token);
     formData.append('file', f);
-    //var taking;
-    // xhr.upload.addEventListener("progress", function(evt) {
-    //     if (evt.lengthComputable) {
-    //         var nowDate = new Date().getTime();
-    //         taking = nowDate - startDate;
-    //         var x = (evt.loaded) / 1024;
-    //         var y = taking / 1000;
-    //         var uploadSpeed = (x / y);
-    //         var formatSpeed;
-    //         if (uploadSpeed > 1024) {
-    //             formatSpeed = (uploadSpeed / 1024).toFixed(2) + "Mb\/s";
-    //         } else {
-    //             formatSpeed = uploadSpeed.toFixed(2) + "Kb\/s";
-    //         }
-    //         var percentComplete = Math.round(evt.loaded * 100 / evt.total);
-    //         progressbar.progressbar("value", percentComplete);
-    //         // console && console.log(percentComplete, ",", formatSpeed);
-    //     }
-    // }, false);
-
     xhr.onreadystatechange = function(response) {
         if (xhr.readyState == 4 && xhr.status == 200 && xhr.responseText != "") {
             var response = JSON.parse(xhr.responseText);
@@ -140,13 +148,11 @@ App.uploadImage = function(f,token,view_id,index) {
             var url = App.config.uploadDomain+response.key;
             var views = App.SiteData.toJSON().views;
             views[response['x:view_id']].data.img[response['x:index']] = url;
-            //$("#dialog").html(xhr.responseText).dialog();
+            if(callback)callback();
         } else if (xhr.status != 200 && xhr.responseText) {
             console.log('error:'+xhr.responseText);
         }
     };
-    //startDate = new Date().getTime();
-    //$("#progressbar").show();
     xhr.send(formData);
 };
 

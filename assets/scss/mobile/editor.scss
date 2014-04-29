@@ -106,3 +106,23 @@
 	}
 
 }
+#fullscreen{
+	display:none;
+	position:fixed;
+	top:0;
+	left:0;
+	background-color:#000;
+	color:#fff;
+	opacity:0.8;
+	z-index:9999;
+	height:100%;
+	width:100%;
+	.info{
+		text-align:center;
+		width:200px;
+		margin:70% auto;
+	}
+	&.show{
+		display:block;
+	}
+}

@@ -37,6 +37,21 @@ App.View.Sidebar = App.View.extend({
     }
 });
 
+App.View.Progress = App.View.extend({
+    displayInfo:function(action){
+        this.$('.info>.title').text(action);
+    },
+    displayProgress:function(number){
+        this.$('.info>.progressbar').text(number+'%');
+    },
+    show:function(){
+        this.$el.addClass('show');
+    },
+    hide:function(){
+        this.$el.removeClass('show');
+    }
+});
+
 App.View.Section = App.View.extend({
     events:{
         'click [data-edit=text-enable]':'editText',
