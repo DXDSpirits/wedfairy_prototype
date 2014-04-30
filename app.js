@@ -1,14 +1,10 @@
-var express = require('express');
-var http = require('http');
-var path = require('path');
+var express = require('express'),http = require('http'),path = require('path'),qiniu = require('qiniu');
 var app = express();
-var qiniu = require('qiniu');
 qiniu.conf.ACCESS_KEY='Dl9yzO06apYucr3q9s4IhRiohhHfWDjGi8XgcIU8';
 qiniu.conf.SECRET_KEY='yWz8Q_dxvi81X20PZ-h54OjX_Ugbo0ShUZZDWMQ0';
 
 var settings = {
-	"cookieSecret": "invitation",
-	"db": "invitation",
+	"dbname": "invitation",
 	"host": "127.0.0.1"
 };
 
@@ -24,10 +20,6 @@ var getUptoken = function (bucketname) {
 	return putPolicy.token();
 }
 
-var mongodb = require('mongodb');
-var server = new mongodb.Server(settings.host,27017,{auto_reconnect:true});
-var DB = new mongodb.Db(settings.db,server,{safe:true});
-
 app.set('port', process.env.PORT || 8080);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
@@ -38,40 +30,56 @@ app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
-// if ('development' == app.get('env')) {
-//   app.use(express.errorHandler());
-// }
-// 
+var mongoose = require('mongoose');
+var db = mongoose.connect('mongodb://'+settings.host+'/'+settings.dbname);
+
+var ThemeSchema = new mongoose.Schema({
+	theme_name: String,
+	css: String,
+	data: String,
+	template: String,
+	application: String,
+	view: String
+});
+var Theme = mongoose.model('theme',ThemeSchema);
+var UserDataSchema = new mongoose.Schema({
+	id: Number,
+	title: String,
+	description: String,
+	user: Number,
+	site_name: String,
+	theme_type: String,
+	views: [{view_id: String,data: Object}]
+});
+var UserData = mongoose.model('data',UserDataSchema);
+
 app.get(/^\/pages\/(\w+)\/?$/, function(req, res){
     var site_name = req.params[0];
-	DB.open(function (err, db) {
-		if (err) {
-			return false;
-		}
-		db.collection('theme', function (err, collection) {
-			if (err) {
-				db.close();
-				return false;
-			}
-			collection.findOne({theme_name: site_name},
-				function (err, theme){
-			        db.close();
-			        if (err) {
-			          return false;
-			        }
-			        else{
-					    res.render('page', { 
-					    	site_name: site_name,
-					    	application_path: theme.application,
-					    	css_path: theme.css,
-					    	data_path: theme.data,
-					    	view_path: theme.view,
-					    	template_path: theme.template
-					    });
-			        }
-		      	}
-	      	);
-		});
+    Theme.findOne({theme_name:site_name},function (err, theme){
+		if (err) return console.error(err);
+	    res.render('page', { 
+	    	site_name: site_name,
+	    	application_path: theme.application,
+	    	css_path: theme.css,
+	    	data_path: theme.data,
+	    	view_path: theme.view,
+	    	template_path: theme.template
+	    });
+	});
+});
+
+app.get(/^\/sites\/(\w+)\/?$/, function(req, res){
+    var site_name = req.params[0];
+    Theme.findOne({theme_name:site_name},function (err, theme){
+		if (err) return console.error(err);
+	    res.render('index', { 
+	    	site_name: site_name,
+	    	application_path: theme.application,
+	    	css_path: theme.css,
+	    	data_path: theme.data,
+	    	view_path: theme.view,
+	    	template_path: theme.template
+	    });
 	});
 });
 
@@ -87,98 +95,20 @@ app.get(/^\/upload\/image\/token\/?$/,function(req,res){
     }
 });
 
-app.get(/^\/sites\/(\w+)\/?$/, function(req, res){
-    var site_name = req.params[0];
-	DB.open(function (err, db) {
-		if (err) {
-			return false;
-		}
-		db.collection('theme', function (err, collection) {
-			if (err) {
-				db.close();
-				return false;
-			}
-			collection.findOne({theme_name: site_name},
-				function (err, theme){
-			        db.close();
-			        if (err) {
-			          return false;
-			        }
-			        else{
-					    res.render('index', { 
-					    	site_name: site_name,
-					    	application_path: theme.application,
-					    	css_path: theme.css,
-					    	data_path: theme.data,
-					    	view_path: theme.view,
-					    	template_path: theme.template
-					    });
-			        }
-		      	}
-	      	);
-		});
-	});
-});
-
 app.get(/^\/data\/(\w+)\/?$/, function(req, res){
     var site_name = req.params[0];
-	DB.open(function (err, db) {
-		if (err) {
-			return false;
-		}
-		db.collection('data', function (err, collection) {
-			if (err) {
-				db.close();
-				return false;
-			}
-			collection.findOne({theme_type: site_name},
-				function (err, theme){
-			        db.close();
-			        if (err) {
-			          return false;
-			        }
-			        else{
-					    res.send(theme);
-			        }
-		      	}
-	      	);
-		});
+    UserData.findOne({theme_type: site_name},function (err, userdata){
+		if (err) return console.error(err);
+	    res.send(userdata);
 	});
 });
 
 app.post(/^\/data\/(\w+)\/?$/, function(req, res){
     var site_name = req.params[0];
-	DB.open(function (err, db) {
-		if (err) {
-			return false;
-		}
-		db.collection('data', function (err, collection) {
-			if (err) {
-				db.close();
-				return false;
-			}
-			var data = JSON.parse(req.body.json);
-			console.log(data);
-			collection.update({theme_type: site_name},{
-				id:data.id,
-				title:data.title,
-				description:data.site_description,
-				user:data.user,
-				site_name:data.site_name,
-				theme_type:data.theme_type,
-				views:data.views
-			},function (err, theme){
-			        db.close();
-			        if (err) {
-			        	console.log(err);
-			          return false;
-			        }
-			        else{
-			        	res.json('success');
-			        }
-		      	}
-	      	);
-		});
+    var data = JSON.parse(req.body.json);
+    UserData.update({theme_type: site_name},data,function (err){
+		if (err) return console.error(err);
+		res.send({state:1,msg:'success'});
 	});
 });
 
